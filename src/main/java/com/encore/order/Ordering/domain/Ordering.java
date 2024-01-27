@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class Ordering {
+    @Column(nullable = false, length = 20, unique = true)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +25,7 @@ public class Ordering {
     @JoinColumn(name = "member_id")
     private Member member;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private OrderStatus orderStatus;
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
