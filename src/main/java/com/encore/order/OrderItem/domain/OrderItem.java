@@ -1,7 +1,7 @@
-package com.encore.order.Ordering.domain;
+package com.encore.order.OrderItem.domain;
 
-import com.encore.order.Member.domain.Member;
-import com.encore.order.OrderItem.domain.OrderItem;
+import com.encore.order.Item.domain.Item;
+import com.encore.order.Ordering.domain.Ordering;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,30 +11,34 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Getter
 @Entity
-@NoArgsConstructor
+@Getter
 @Builder
 @AllArgsConstructor
-public class Ordering {
-    @Column(nullable = false, length = 20, unique = true)
+@NoArgsConstructor
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-    @OneToMany(mappedBy = "ordering", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<OrderItem> orderItemList = new ArrayList<>();
-    @Enumerated(EnumType.STRING)
+
+    @Getter
     @Column(nullable = false)
-    private OrderStatus orderStatus;
+    private int quantity;
+
+    @Getter
+    @JoinColumn(name = "item_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Item item;
+
+    @JoinColumn(name = "ordering_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Ordering ordering;
+
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdTime;
+
     @UpdateTimestamp
     @Column(columnDefinition = "TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedTime;
